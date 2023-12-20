@@ -8,17 +8,23 @@ $files = @{
     '6. Microsoft Activation Scripts' = 'https://drive.google.com/uc?id=1bFoFl4Vb8UMwcDmDErjya9aBiDbTU95F'
 }
 
-# Apresenta um menu interativo
-$choice = $files.Keys | Out-GridView -Title 'Escolha um arquivo para download' -PassThru
+# Exibir o menu dinâmico no CMD
+foreach ($key in $files.Keys) {
+    Write-Host "$key"
+}
 
-if ($choice) {
+# Solicitar a escolha do usuário
+$choice = Read-Host "Escolha o número do arquivo para download"
+
+# Validar a escolha e fazer o download
+if ($files.ContainsKey($choice)) {
     $fileUrl = $files[$choice]
     $destinationPath = "$env:USERPROFILE\Downloads\$choice"
 
-    # Faz o download do arquivo escolhido
+    # Fazer o download do arquivo escolhido
     Invoke-WebRequest -Uri $fileUrl -OutFile $destinationPath
 
     Write-Host "Arquivo baixado com sucesso para: $destinationPath"
 } else {
-    Write-Host "Nenhuma opção selecionada."
+    Write-Host "Opção inválida."
 }
